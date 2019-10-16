@@ -36,7 +36,7 @@
 		<!--  引入自己的工具类 -->
 		<dependency>
 			<groupId>com.zhengaobin.cms</groupId>
-  			<artifactId>cms-common</artifactId>
+  			<artifactId>zhengaobin-cms-common</artifactId>
   			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	
