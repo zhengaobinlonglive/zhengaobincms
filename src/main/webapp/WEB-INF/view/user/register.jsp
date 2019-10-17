@@ -42,16 +42,23 @@
 						<div class="card-header">欢迎注册</div>
 						<div class="card-body">
 
-
 							<form action="/user/register" method="post" id="valiateform">
-								<p class="w-100" align="center" style="color: red">${msg }</p>
+								<p class="w-100" align="center" style="color: red">${errorMsg}</p>
 								<div class="form-group">
 									<label for="username">用户名:</label> <input type="text"
-										class="form-control" name="username" placeholder="请输入用户名">
+										class="form-control" name="username" 
+										required="true"
+										maxlength="12"
+										minlength="3"
+										remote="/user/checkExist"
+										placeholder="请输入用户名">
 								</div>
 								<div class="form-group">
 									<label for="password">密码:</label> <input type="password"
 										class="form-control" name="password" id="password"
+										required="true"
+										maxlength="12"
+										minlength="3"
 										placeholder="请输入密码">
 								</div>
 								<!-- <div class="form-group">
@@ -100,48 +107,7 @@
 	<jsp:include page="/WEB-INF/view/common/footer.jsp" />
 
 	<script type="text/javascript">
-		$(function() {
-			$("#valiateform").validate({
-				//校验规则
-				rules : {
-					username : {
-						required : true,
-						minlength : 2,
-						remote:"/user/check",//校验用户唯一性
-					},
-					password : {
-						required : true,
-						minlength : 5
-					},
-					repassword : {
-						required : true,
-						minlength : 5,
-						equalTo : "#password"
-					},
-
-				},
-				//不满足校验规则信息提示
-				messages : {
-					username : {
-						required : "请输入用户名",
-						minlength : "用户名长度至少两个",
-						remote:"用户已被注册",
-						
-					},
-					password: {
-						required: "密码不能为空",
-						minlength: "密码至少5个长度"
-					},
-					repassword: {
-						required: "密码不能为空",
-						minlength: "密码至少5个长度",
-						equalTo: "两次密码输入不一致"
-					},
-				}
-
-			})
-
-		})
+		$("#valiateform").validate();
 	</script>
 </body>
 </html>

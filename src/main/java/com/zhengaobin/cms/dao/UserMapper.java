@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import com.zhengaobin.cms.entity.User;
+import com.zhengaobin.utils.StringUtils;
 
 
 /**
@@ -17,4 +18,6 @@ public interface UserMapper {
 	
 	@Select("select id,username,password from cms_user where username=#{value} limit 1")
 	User findByName(String username);
+	
+	
 }

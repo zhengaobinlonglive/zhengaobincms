@@ -2,6 +2,10 @@ package com.zhengaobin.cms.entity;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 /**
  * @author 郑奥斌
  *
@@ -9,7 +13,12 @@ import java.util.Date;
  */
 public class User {       
 	private Integer id;
+	
+	@NotEmpty(message="用户名不能为空")
+	@Length(min=4,max=12,message="用户名的长度不合法")
 	private String username;
+	
+	@NotEmpty(message="密码不能为空")
 	private String password;
 	private String nickname;
 	private Date birthday;
