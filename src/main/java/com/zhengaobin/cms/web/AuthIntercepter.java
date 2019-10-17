@@ -8,15 +8,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
+
+
 import com.zhengaobin.cms.comon.ConstClass;
+import com.zhengaobin.cms.entity.User;
 
 /**
  * @author 郑奥斌
  *
  * 2019年10月16日
  */
-public class Authintercepter implements HandlerInterceptor{
+public class AuthIntercepter implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response
 			,Object handler) throws ServletException, IOException{
 			

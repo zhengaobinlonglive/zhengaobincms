@@ -22,6 +22,7 @@ import com.zhengaobin.cms.service.UserService;
  * 2019年10月16日
  */
 @Controller
+@RequestMapping("user")
 public class UserController {
 	@Autowired
 	UserService userService;
