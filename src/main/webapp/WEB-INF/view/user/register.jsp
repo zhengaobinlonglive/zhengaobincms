@@ -50,9 +50,8 @@
 										required="true"
 										maxlength="12"
 										minlength="3"
-										
+										remote="/user/checkExist"
 										placeholder="请输入用户名">
-										<!-- remote="/user/checkExist" -->
 								</div>
 								<div class="form-group">
 									<label for="password">密码:</label> <input type="password"

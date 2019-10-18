@@ -10,11 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.zhengaobin.cms.comon.ConstClass;
+import com.zhengaobin.cms.entity.Article;
 import com.zhengaobin.cms.entity.User;
+import com.zhengaobin.cms.service.ArticleService;
 import com.zhengaobin.cms.service.UserService;
+import com.zhengaobin.cms.web.PageUtils;
 
 /**
  * @author 郑奥斌
@@ -27,6 +32,9 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	ArticleService articleService;
+	
 	@GetMapping("register")
 	public String register(){
 		
@@ -38,6 +46,11 @@ public class UserController {
 		return "user/index";
 	}
 	
+	/**
+	 * 判断用户名是否已经被占用
+	 * @param username
+	 * @return
+	 */
 	@RequestMapping("checkExist")
 	@ResponseBody
 	public boolean checkExist(String username){
@@ -72,28 +85,70 @@ public class UserController {
 		return "user/login";
 	}
 	
-	@PostMapping("login")
+	@PostMapping("login")// 只接受POst的请求
 	public String login(HttpServletRequest request,@Validated User user,
 			BindingResult erroResult){
 		if(erroResult.hasErrors()){
 			return "login";
 		}
+		
+		//登录
 		User login = userService.login(user);
 		if(login==null){
 			request.setAttribute("errMsg","用户名密码错误");
 			return "user/login";
 		}else {
 			request.getSession().setAttribute(ConstClass.SESSION_USER_KEY,login);
+			//普通注册用户
 			if(login.getRole()==ConstClass.USER_ROLE_GENERAL){
 				return "redirect:home";
+				//管理员用户	
 			}else if(login.getRole()==ConstClass.USER_ROLE_ADMIN){
 				return "redirect:../admin/index";
 			}else {
+				// 其他情况
 				return "user/login";
 			}
 			
 		}
 		
 	}
+	
+	/**
+	 * 进入个人中心(普通注册用户)
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("home")
+	public String home(HttpServletRequest request){
+		return "my/home";
+	}
+	
+	/**
+	 * 删除用户自己的文章
+	 * @param id 文章id
+	 * @return
+	 */
+	@RequestMapping("delArticle")
+	@ResponseBody
+	public boolean delArticle(Integer id){
+		return articleService.remove(id)>0;
+	}
+	
+	/**
+	 * 进入个人中心 获取我的文章
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("myarticlelist")
+	public String myarticles(HttpServletRequest request,@RequestParam(defaultValue="1")Integer page){
+		User loginUser = (User) request.getSession().getAttribute(ConstClass.SESSION_USER_KEY);
+		PageInfo<Article> pageArticles = articleService.listArticleByUserId(loginUser.getId(), page);
+		PageUtils.page(request, "/user/myarticlelist", 10, pageArticles.getList(), (long)pageArticles.getSize(), pageArticles.getPageNum());
+		request.setAttribute("pageArticles", pageArticles);
+		return "/my/list";
+	}
+	
+
 	
 }

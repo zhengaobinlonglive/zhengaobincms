@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.zhengaobin.cms.dao.ArticleMapper">  
+  	<resultMap type="article" id="articleMapper">
+		<id column="id" property="id" />
+		<result column="channelId" property="channel_id"/>
+		<result column="categoryId" property="category_id"/>
+		<result column="userId" property="user_id"/>
+		<association property="user_id" column="userId" 
+		   select="com.zhengaobin.cms.dao.UserMapper.findUserById" />
+	    <association property="channel_id" column="channelId" 
+		   select="com.zhengaobin.cms.dao.ChannelMapper.findById" />
+		<association property="category_id" column="categoryId" 
+		   select="com.zhengaobin.cms.dao.CatMapper.findById" />
+	</resultMap> 
+	
+	<!-- 根据文章的分类和频道获取文章 -->
+	<select id="list" resultMap="articleMapper">
+		SELECT id,title,picture,channel_id,category_id,user_id,
+		        hits,hot,status,created,updated,commentCnt
+		 FROM cms_article
+		 WHERE channel_id=#{chnId}
+		 <if test="catId!=0">
+		 	AND category_id=#{catId}
+		 </if>       
+	</select>
+	<select id="listHot"  resultMap="articleMapper">
+		SELECT id,title,picture,channel_id,category_id,user_id,
+		        hits,hot,status,created,updated,commentCnt
+		 FROM cms_article
+		 	WHERE hot>0
+		 	AND deleted=0
+		 	ORDER BY hot DESC,created DESC
+	</select>
+	<!-- 获取最新文章 -->
+	<select id="listLast"  resultMap="articleMapper">
+		SELECT id,title,picture,channel_id,category_id,user_id,
+		        hits,hot,status,created,updated,commentCnt
+		 FROM cms_article
+		 	WHERE deleted=0
+		 	ORDER BY created DESC limit #{value}
+	</select>
+	
+	<select id="findById" resultMap="articleMapper">
+		SELECT id,title,picture,content,channel_id,category_id,user_id,
+		        hits,hot,status,created,updated,commentCnt
+		 FROM cms_article
+		 WHERE id=#{value}
+		 AND deleted=0
+	</select>
+	
+	<!-- 根据用户id查找文章 -->
+	<select id="listByUserId" resultMap="articleMapper">
+		SELECT id,title,picture,user_id,channel_id,category_id,
+		        hits,hot,status,created,updated,commentCnt
+		 FROM cms_article
+		 WHERE user_id=#{value}
+		   AND deleted=0
+	</select>
+	
+	
+	<insert id="add"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO cms_article(title,content,picture,channel_id,category_id,user_id,hits,hot,status,deleted,created,updated,commentCnt)
+		  values(#{title},#{content},#{picture},#{channelId},#{categoryId},#{userId},0,0,0,0,now(),now(),0)
+	</insert>
+ 
+  </mapper>
+  

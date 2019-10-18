@@ -5,7 +5,9 @@
   
   <mapper namespace="com.zhengaobin.cms.dao.UserMapper"> 
   
-  
+  		<select id="findUserById" resultType="user">
+ 			select * from cms_user where id=#{value}
+ 		</select>
   
   </mapper>
   
