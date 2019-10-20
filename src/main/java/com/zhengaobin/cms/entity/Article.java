@@ -34,7 +34,15 @@ public class Article {
 		//状态
 		private Integer status;
 		
+		private User user;
 		
+		
+		public User getUser() {
+			return user;
+		}
+		public void setUser(User user) {
+			this.user = user;
+		}
 		//是否已经逻辑删除
 		private Integer deleted;
 		//发表时间

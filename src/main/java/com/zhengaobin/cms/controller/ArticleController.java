@@ -31,6 +31,7 @@ import com.zhengaobin.cms.service.ChannelService;
  * 2019年10月18日
  */
 @Controller
+@RequestMapping("article")
 public class ArticleController {
 	@Autowired
 	ArticleService articleService;
@@ -175,6 +176,35 @@ public class ArticleController {
 		List<Cat> chnlList = catService.getListByChnlId(chnlId);
 		return chnlList;
 	}
+	
+	
+	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
+	 */
+	@RequestMapping(value = "update",method=RequestMethod.POST)
+	@ResponseBody
+	public boolean updatev1(HttpServletRequest request,Article article, MultipartFile file) throws IllegalStateException, IOException {
+		
+		processFile(file,article);
+		
+		//获取作者
+		User loginUser = (User)request.getSession().getAttribute(ConstClass.SESSION_USER_KEY);
+		article.setUserId(loginUser.getId());
+		
+		int result = articleService.update(article);
+		
+		return result > 0;
+		
+	}
+	
+	
+	
+	
 	
 	
 	
