@@ -8,6 +8,19 @@
   		<select id="findUserById" resultType="user">
  			select * from cms_user where id=#{value}
  		</select>
-  
+ 		
+  		<!-- 获取用户列表 -->
+	<select id="userList" resultType="user">
+		SELECT
+			id,username,locked,gender,create_time,update_time
+		FROM
+			cms_user
+		<where>
+			<if test="name != null and name != ''">
+				username LIKE concat('%',#{name},'%')
+			</if>
+		</where>
+	</select>
+	
   </mapper>
   

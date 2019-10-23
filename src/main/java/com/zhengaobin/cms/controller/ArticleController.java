@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zhengaobin.cms.comon.ConstClass;
+import com.zhengaobin.cms.comon.ResultMsg;
 import com.zhengaobin.cms.entity.Article;
 import com.zhengaobin.cms.entity.Cat;
 import com.zhengaobin.cms.entity.Channel;
@@ -122,6 +123,14 @@ public class ArticleController {
 	private void processFile(MultipartFile file,Article article) throws IllegalStateException, IOException {
 
 		// 原来的文件名称
+		System.out.println("file.isEmpty() :" + file.isEmpty()  );
+		System.out.println("file.name :" + file.getOriginalFilename());
+		
+		if(file.isEmpty()||"".equals(file.getOriginalFilename()) || file.getOriginalFilename().lastIndexOf('.')<0 ) {
+			article.setPicture("");
+			return;
+		}
+			
 		String originName = file.getOriginalFilename();
 		String suffixName = originName.substring(originName.lastIndexOf('.'));
 		SimpleDateFormat sdf=  new SimpleDateFormat("yyyyMMdd");
@@ -145,50 +154,8 @@ public class ArticleController {
 	 * @throws IllegalStateException 
 	 */
 	@RequestMapping(value = "update",method=RequestMethod.POST)
-	public String update(HttpServletRequest request,Article article, MultipartFile file) throws IllegalStateException, IOException {
-		
-		processFile(file,article);
-		
-		//获取作者
-		User loginUser = (User)request.getSession().getAttribute(ConstClass.SESSION_USER_KEY);
-		article.setUserId(loginUser.getId());
-		
-		int result = articleService.update(article);
-		
-		return "article/update";
-		
-	}
-	
-	
-	
-	
-	
-	
-	/**
-	 * 根据频道获取相应的分类  用户发布文章或者修改文章的下拉框
-	 * @param chnlId 频道id
-	 * @return
-	 */
-	@RequestMapping(value="listCatByChnl",method=RequestMethod.GET)
 	@ResponseBody
-	public List<Cat> getCatByChnl(int chnlId){
-		
-		List<Cat> chnlList = catService.getListByChnlId(chnlId);
-		return chnlList;
-	}
-	
-	
-	
-	/**
-	 * 
-	 * @param request
-	 * @return
-	 * @throws IOException 
-	 * @throws IllegalStateException 
-	 */
-	@RequestMapping(value = "update",method=RequestMethod.POST)
-	@ResponseBody
-	public boolean updatev1(HttpServletRequest request,Article article, MultipartFile file) throws IllegalStateException, IOException {
+	public boolean update(HttpServletRequest request,Article article, MultipartFile file) throws IllegalStateException, IOException {
 		
 		processFile(file,article);
 		
@@ -203,10 +170,17 @@ public class ArticleController {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 根据频道获取相应的分类  用户发布文章或者修改文章的下拉框
+	 * @param chnlId 频道id
+	 * @return
+	 */
+	@RequestMapping(value="listCatByChnl",method=RequestMethod.GET)
+	@ResponseBody
+	//public List<Cat> getCatByChnl(int chnlId){
+	public ResultMsg getCatByChnl(int chnlId){
+		
+		List<Cat> chnlList = catService.getListByChnlId(chnlId);
+		return new ResultMsg(1, "获取数据成功", chnlList);
+	}
 }

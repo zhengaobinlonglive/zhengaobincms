@@ -40,7 +40,7 @@
 
 						<div class="card-body">
 							<form action="/user/login" method="post" id="valiateform">
-								<p align="center" style="color: red">${errorMsg}</p>
+								<p align="center" style="color: red">${errMsg}</p>
 								<div class="form-group">
 									<label for="username">用户名:</label> <input type="text"
 										class="form-control" name="username" id="username"

@@ -1,8 +1,12 @@
 package com.zhengaobin.cms.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhengaobin.cms.dao.UserMapper;
 import com.zhengaobin.cms.entity.User;
 import com.zhengaobin.cms.service.UserService;
@@ -43,6 +47,22 @@ public class UserServiceimpl implements UserService{
 		
 		return null!=userMapper.findByName(username);
 	}
+
+	@Override
+	public PageInfo<User> userList(Integer pageNum,String name) {
+		PageHelper.startPage(pageNum, 10);
+		List<User> userList = userMapper.userList(name);
+		return new PageInfo<>(userList);
+	}
+
+	@Override
+	public int updatelocked(Integer id, Integer locked) {
+		int i = userMapper.updatelocked(id, locked);
+		return i;
+	}
+
+	
+	
 	
 	
 	

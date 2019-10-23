@@ -51,8 +51,16 @@ public class Article {
 		private Date updated;
 		//评论数量
 		private Integer commentCnt;
+		// 标签 用逗号分隔
+		private String tags;
 		
 		
+		public String getTags() {
+			return tags;
+		}
+		public void setTags(String tags) {
+			this.tags = tags;
+		}
 		public Channel getChannel() {
 			return channel;
 		}
@@ -150,6 +158,7 @@ public class Article {
 			this.commentCnt = commentCnt;
 		}
 		
+		
 		@Override
 		public String toString() {
 			return "Article [id=" + id + ", title=" + title + ", content="
@@ -157,9 +166,9 @@ public class Article {
 					+ channelId + ", channel=" + channel + ", categoryId="
 					+ categoryId + ", cat=" + cat + ", userId=" + userId
 					+ ", hits=" + hits + ", hot=" + hot + ", status=" + status
-					+ ", deleted=" + deleted + ", created=" + created
-					+ ", updated=" + updated + ", commentCnt=" + commentCnt
-					+ "]";
+					+ ", user=" + user + ", deleted=" + deleted + ", created="
+					+ created + ", updated=" + updated + ", commentCnt="
+					+ commentCnt + ", tags=" + tags + "]";
 		}
 		@Override
 		public int hashCode() {

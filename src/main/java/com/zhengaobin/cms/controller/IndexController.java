@@ -42,7 +42,7 @@ public class IndexController {
 	 * @param page  文章的页码
 	 * @return
 	 */
-	@RequestMapping("index")
+	@RequestMapping({"index","/"})
 	public String index(HttpServletRequest request,
 			@RequestParam(defaultValue="0") Integer chnId,
 			@RequestParam(defaultValue="0")  Integer catId,
@@ -58,8 +58,8 @@ public class IndexController {
 			//获取该栏目下的文章
 			PageInfo<Article>  articleList = articleService.list(chnId,catId,page);
 			request.setAttribute("articles", articleList);
-			PageUtils.page(request, "/index?chnId="+chnId+"&catId=" + catId, 1, articleList.getList(),
-					(long)articleList.getSize(), articleList.getPageNum());
+			PageUtils.page(request, "/index?chnId="+chnId+"&catId=" + catId, 10, articleList.getList(),
+					(long)articleList.getTotal(), articleList.getPageNum());
 			//request.setAttribute("pageStr", pageStr);
 			
 		}else {
@@ -68,12 +68,16 @@ public class IndexController {
 			PageInfo<Article>  articleList = articleService.hostList(page);
 			request.setAttribute("articles", articleList);
 			PageUtils.page(request, "/index", 10, articleList.getList(),
-				(long)articleList.getSize(), articleList.getPageNum());
+					(long)articleList.getTotal(), articleList.getPageNum());
+			
 		}
 		
 		//获取最新文章
 		List<Article>  lastList = articleService.last(5);
 		request.setAttribute("lastList", lastList);
+		
+		
+		
 		
 		request.setAttribute("chnls", channels);
 		

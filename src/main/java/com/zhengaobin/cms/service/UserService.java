@@ -1,5 +1,10 @@
 package com.zhengaobin.cms.service;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.github.pagehelper.PageInfo;
 import com.zhengaobin.cms.entity.User;
 
 /**
@@ -14,4 +19,7 @@ public interface UserService {
 	
 	boolean checkUserExist(String username);
 	
+	PageInfo<User> userList(Integer pageNum,String name);
+	
+	int updatelocked(Integer id,Integer locked);
 }
