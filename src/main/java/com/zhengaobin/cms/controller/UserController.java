@@ -1,5 +1,11 @@
 package com.zhengaobin.cms.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.zhengaobin.cms.comon.ConstClass;
 import com.zhengaobin.cms.entity.Article;
+import com.zhengaobin.cms.entity.Article4Vote;
 import com.zhengaobin.cms.entity.User;
+import com.zhengaobin.cms.service.Article4VoteService;
 import com.zhengaobin.cms.service.ArticleService;
 import com.zhengaobin.cms.service.UserService;
 import com.zhengaobin.cms.web.PageUtils;
@@ -35,6 +44,22 @@ public class UserController {
 	
 	@Autowired
 	ArticleService articleService;
+	
+	@Autowired
+	Article4VoteService avService;
+	
+	@GetMapping("push")
+	public String push(HttpServletRequest request) {
+		return "my/vote/add";
+		
+	}
+	
+	@PostMapping("push")
+	@ResponseBody
+	public boolean  push(HttpServletRequest request,Article4Vote av) {
+		return avService.publish(av)>0;
+		
+	}
 	
 	@GetMapping("register")
 	public String register(){
@@ -138,7 +163,20 @@ public class UserController {
 	 */
 	@RequestMapping("delArticle")
 	@ResponseBody
-	public boolean delArticle(Integer id){
+	public boolean delArticle(HttpServletRequest request,Integer id) {
+		
+		//判断文章是否存在
+		Article article = articleService.findById(id);
+		if(article==null)
+			return false;
+		
+		//判断文章是否属于自己的
+		User loginUser =(User) request.getSession().getAttribute(
+				ConstClass.SESSION_USER_KEY);
+		if(loginUser.getId()!= article.getUserId()) {
+			return false;
+		}
+		//删除文章
 		return articleService.remove(id)>0;
 	}
 	
@@ -148,12 +186,67 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("myarticlelist")
-	public String myarticles(HttpServletRequest request,@RequestParam(defaultValue="1")Integer page){
-		User loginUser = (User) request.getSession().getAttribute(ConstClass.SESSION_USER_KEY);
-		PageInfo<Article> pageArticles = articleService.listArticleByUserId(loginUser.getId(), page);
-		PageUtils.page(request, "/user/myarticlelist", 10, pageArticles.getList(), (long)pageArticles.getSize(), pageArticles.getPageNum());
+	public String myarticles(HttpServletRequest request,
+			@RequestParam(defaultValue="1") Integer page) {
+		
+		User loginUser =(User) request.getSession().getAttribute(ConstClass.SESSION_USER_KEY);
+		PageInfo<Article>  pageArticles = articleService.listArticleByUserId(loginUser.getId(),page);
+		//PageUtils.page(request, "/user/myarticlelist", 10, pageArticles.getList(), (long)pageArticles.getTotal(), pageArticles.getPageNum());
+		String pageStr = PageUtils.pageLoad(pageArticles.getPageNum(), pageArticles.getPages(), "/user/myarticlelist", 10);
 		request.setAttribute("pageArticles", pageArticles);
+		request.setAttribute("page", pageStr);
 		return "/my/list";
+	}
+	
+	/**
+	 * 跳转到上传页面
+	 */
+	@GetMapping("toAddhead_picture")
+	public String toAddhead_picture() {
+		return "my/addhead_picture";
+	}
+	
+	@PostMapping("addhead_picture")
+	public String addHead_picture(HttpServletRequest request,MultipartFile file) throws IllegalStateException, IOException {
+		User user = (User)request.getSession().getAttribute("SESSION_USER_KEY");
+		System.out.println("112323423121233");
+		System.out.println("user----------"+user);
+		processFile(file,user);
+		
+		 userService.addHead_picture(user);
+		return "redirect:home";
+		
+	}
+	
+	/**
+	 * 处理接收到的文件
+	 */
+	
+	private void processFile(MultipartFile file,User user) throws IllegalStateException, IOException {
+
+
+		// 原来的文件名称
+		System.out.println("file.isEmpty() :" + file.isEmpty()  );
+		System.out.println("file.name :" + file.getOriginalFilename());
+		
+		if(file.isEmpty()||"".equals(file.getOriginalFilename()) || file.getOriginalFilename().lastIndexOf('.')<0 ) {
+			user.setHead_picture("");
+			return;
+		}
+			
+		String originName = file.getOriginalFilename();
+		String suffixName = originName.substring(originName.lastIndexOf('.'));
+		SimpleDateFormat sdf=  new SimpleDateFormat("yyyyMMdd");
+		String path = "d:/pic/" + sdf.format(new Date());
+		File pathFile = new File(path);
+		if(!pathFile.exists()) {
+			pathFile.mkdir();
+		}
+		String destFileName = 		path + "/" +  UUID.randomUUID().toString() + suffixName;
+		File distFile = new File( destFileName);
+		file.transferTo(distFile);//文件另存到这个目录下边
+		user.setHead_picture(destFileName.substring(7));
+		
 	}
 	
 	/**

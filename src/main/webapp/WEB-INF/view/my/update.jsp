@@ -72,7 +72,7 @@
 			</select>
 			
 			<label for="category">文章标签</label> 
-				<input name="tags" size="50" value="${article.tags}"/>
+				<input name="display_name" size="50" value="${article.tags}"/>
 				
 		</div>
 		

@@ -38,6 +38,15 @@ public interface UserMapper {
 	@Update("UPDATE cms_user SET locked = #{locked} WHERE id = #{id}")
 	int updatelocked(@Param("id")Integer id, @Param("locked")Integer locked);
 	
+	/**
+	 * 查询
+	 * @param locked
+	 * @return
+	 */
+	List<User> list(@Param("locked")int locked);
 	
+	//上傳圖片
+	@Update("update cms_user set head_picture=#{head_picture} where id=#{id}")
+	int addHead_picture(User user);
 	
 }

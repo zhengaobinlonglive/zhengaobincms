@@ -29,6 +29,8 @@ public class User {
 	private String url;
 	private int score;
 	private int role;
+	
+	private String head_picture;
 	public Integer getId() {
 		return id;
 	}
@@ -41,6 +43,15 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	public String getHead_picture() {
+		return head_picture;
+	}
+
+
+	public void setHead_picture(String head_picture) {
+		this.head_picture = head_picture;
+	}
+
 	public String getPassword() {
 		return password;
 	}

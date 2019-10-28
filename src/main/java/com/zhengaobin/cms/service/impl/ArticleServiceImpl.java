@@ -9,7 +9,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhengaobin.cms.dao.ArticleMapper;
 import com.zhengaobin.cms.entity.Article;
-import com.zhengaobin.cms.entity.Tag;
+import com.zhengaobin.cms.entity.Comment;
+import com.zhengaobin.cms.entity.Term;
 import com.zhengaobin.cms.service.ArticleService;
 
 /**
@@ -79,12 +80,15 @@ public class ArticleServiceImpl implements ArticleService{
 	 */
 	private void processTag(Article article){
 		
+		if(article.getTags()==null)
+			return;
+		
 		String[] tags = article.getTags().split(",");
 		for (String tag : tags) {
 			// 判断这个tag在数据库当中是否存在
-			Tag tagBean = articleMapper.findTagByName(tag);
+			Term tagBean = articleMapper.findTagByName(tag);
 			if(tagBean==null) {
-				tagBean = new Tag(tag);
+				tagBean = new Term(tag);
 				articleMapper.addTag(tagBean);
 			}
 			
@@ -149,8 +153,32 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public int updateHot(Integer articleId, int status) {
-		// TODO Auto-generated method stub
+		
 		return articleMapper.updateHot(articleId,status);
+	}
+
+	@Override
+	public void comment(Integer userId, Integer articleId, String content) {
+		//创建一个评论对象
+		Comment comment = new Comment(articleId,userId,content);
+		//增加评论
+		articleMapper.addComment(comment);
+		//评论数量自加
+		articleMapper.increaseCommentCnt(articleId);
+		
+	}
+
+	@Override
+	public PageInfo<Comment> getCommentByArticleId(Integer articleId,
+			Integer page) {
+		PageHelper.startPage(page, 5);
+		return new PageInfo<Comment>(articleMapper.getCommnentByArticleId(articleId));
+	}
+	
+	@Override
+	public int addHits(Integer id) {
+		// TODO Auto-generated method stub
+		return articleMapper.increaseHits(id);
 	}
 
 }

@@ -44,7 +44,7 @@
 				<tr align="center">
 					<td>${index.index+1 }</td>
 					<td>${u.username}</td>
-					<td><button type="button" class="btn btn-success" onclick="moption('${u.id}',this)">${u.locked=="1"?"正常":"禁用"}</button></td>
+					<td><button type="button" class="btn btn-success" onclick="moption('${u.id}',this)">${u.locked=="0"?"正常":"禁用"}</button></td>
 					
 					<td>${u.gender==0?"女":"男"}</td>
 					<%-- <td>${u.birthday}</td> --%>

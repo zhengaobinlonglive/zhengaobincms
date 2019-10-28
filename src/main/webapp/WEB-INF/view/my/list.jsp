@@ -52,7 +52,7 @@ function del(id) {
 		</dl>
 		<hr>
 	</c:forEach>
-	${pageStr}
+	${page}
 
 
 </body>

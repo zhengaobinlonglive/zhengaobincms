@@ -9,7 +9,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.zhengaobin.cms.entity.Article;
-import com.zhengaobin.cms.entity.Tag;
+import com.zhengaobin.cms.entity.Comment;
+import com.zhengaobin.cms.entity.Term;
 
 /**
  * @author 郑奥斌
@@ -109,8 +110,8 @@ public interface ArticleMapper {
 	 * @param tag
 	 * @return
 	 */
-	@Select("SELECT * FROM cms_tag where tagname=#{value} limit 1")
-	Tag findTagByName(String tag);
+	@Select("SELECT * FROM cms_term where display_name=#{value} limit 1")
+	Term findTagByName(String tag);
 
 	
 	/**
@@ -118,22 +119,52 @@ public interface ArticleMapper {
 	 * @param tagBean
 	 * @return
 	 */
-	int addTag(Tag tagBean);
+	int addTag(Term tagBean);
 
 	/**
 	 * 增加数据到文章标签中间表
 	 * @param articleId 
 	 * @param tagId  
 	 */
-	@Insert("INSERT INTO cms_article_tag_middle values(#{articleId},#{tagId}) ")
+	@Insert("INSERT INTO cms_article_term values(#{articleId},#{tagId}) ")
 	void addArticleTag(@Param("articleId") Integer articleId, @Param("tagId") Integer tagId);
 
 	/**
 	 *  删除中间表
 	 * @param articleId
 	 */
-	@Delete(" DELETE FROM cms_article_tag_middle WHERE aid=#{value}")
+	@Delete(" DELETE FROM cms_article_term WHERE aid=#{value}")
 	int delTagsByArticleId(Integer articleId);
+	
+	@Insert("INSERT INTO cms_comment(userId,articleId,content,created) "
+			+ "VALUES(#{userId},#{articleId},#{content},now() )")
+	void addComment(Comment comment);
+	
+	@Update(" UPDATE cms_article SET commentCnt=commentCnt+1 WHERE id=#{value}")
+	void increaseCommentCnt(Integer articleId);
+	
+	@Select("SELECT c.*,u.username as userName FROM cms_comment c LEFT JOIN cms_user u ON u.id=c.userId "
+			+ " WHERE c.articleId=#{value} ORDER BY id desc")
+	List<Comment> getCommnentByArticleId(Integer articleId);
+
+	/**
+	 * 根据主题id获取文章列表
+	 * @param id
+	 * @return
+	 */
+	@Select("SELECT a.id,a.title,a.created FROM cms_special_article  "
+			+ " sa JOIN cms_article  a ON sa.aid=a.id "
+			+ " WHERE sa.sid=#{value}")
+	List<Article> findBySepecailId(Integer id);
+
+	@Select("SELECT count(1) FROM cms_special_article  "
+			+ " sa JOIN cms_article  a ON sa.aid=a.id "
+			+ " WHERE sa.sid=#{value}")
+	Integer getArticleNum(Integer id);
+	
+	@Update("UPDATE cms_article SET hits = hits + 1 WHERE id =  #{id} ")
+	int increaseHits(Integer id);
+	
 	
 }
 

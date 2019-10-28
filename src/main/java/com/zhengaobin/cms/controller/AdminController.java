@@ -1,11 +1,14 @@
 package com.zhengaobin.cms.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,9 +16,12 @@ import com.github.pagehelper.PageInfo;
 import com.zhengaobin.cms.comon.ConstClass;
 import com.zhengaobin.cms.comon.ResultMsg;
 import com.zhengaobin.cms.entity.Article;
+import com.zhengaobin.cms.entity.Link;
 import com.zhengaobin.cms.entity.User;
 import com.zhengaobin.cms.service.ArticleService;
+import com.zhengaobin.cms.service.LinkService;
 import com.zhengaobin.cms.web.PageUtils;
+import com.zhengaobin.utils.StringUtils;
 
 /**
  * @author 郑奥斌
@@ -29,10 +35,74 @@ public class AdminController {
 	@Autowired
 	ArticleService articelService;
 	
+
+	@Autowired
+	private LinkService linkService;
+	
 	@RequestMapping("index")
 	public String index() {
+		//List a = new ArrayList<>();
+		//a.stream().filter()
+		
+		
 		return "admin/index";
+		
 	}
+	
+	//获取友情链接
+		@RequestMapping("linklist")
+		public String list(HttpServletRequest request) {
+			//获取友情连接
+					List<Link> linklist =linkService.linklist();
+					request.setAttribute("linklist", linklist);
+					return "admin/article/link";
+		}
+		
+	/*	//友情链接的修改
+		@RequestMapping("linkupadte")
+		public String linkupadte(HttpServletRequest request,Integer id) {
+			int i =linkService.linkupdate(id);
+			
+				return "rebirect:admin/linklist";
+
+		}*/
+		
+		
+		
+
+		//友情连接添加
+		
+		@RequestMapping(value="addlink",method=RequestMethod.GET)
+		public String add(HttpServletRequest request) {
+			return "admin/addlink";
+		}
+		
+		@RequestMapping(value="addlink",method=RequestMethod.POST)
+		@ResponseBody
+		public  ResultMsg add(HttpServletRequest request,Link link) {
+			
+			if(!StringUtils.isUrl(link.getHttp())) {
+				return new ResultMsg(2, "url格式不正确，请仔细校验一下格式再来啊", "");
+			}
+			
+			int result =linkService.addlink(link);
+			if(result>0) {
+				return new ResultMsg(1, "添加成功", "");
+			}else {
+				return new ResultMsg(2, "添加失败，请与管理员联系", "");
+			}
+			
+			
+		}
+		
+		
+		//友情链接的删除
+		@ResponseBody
+		@RequestMapping("deletelink")
+		public boolean deletelink(Integer id ) {
+			int i =linkService.deletelink(id);
+			return i>0;
+		}
 	
 	@RequestMapping("manArticle")
 	public String adminArticle(HttpServletRequest request,
@@ -40,6 +110,8 @@ public class AdminController {
 			,@RequestParam(defaultValue="0") Integer status
 			) {
 			
+		 //request.getRequestDispatcher("").forward(request, response);
+		
 		  PageInfo<Article> pageInfo= articelService.getAdminArticles(page,status);
 		  request.setAttribute("pageInfo", pageInfo);
 		  request.setAttribute("status", status);

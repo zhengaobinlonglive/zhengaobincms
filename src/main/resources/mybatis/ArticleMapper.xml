@@ -3,12 +3,20 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
+  
   <mapper namespace="com.zhengaobin.cms.dao.ArticleMapper">  
   	<resultMap type="article" id="articleMapper">
 		<id column="id" property="id" />
 		<result column="channel_id" property="channelId"/>
 		<result column="category_id" property="categoryId"/>
 		<result column="user_id" property="userId"/>
+		
+		<result column="articleType" property="articleType" 
+		   typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+		   jdbcType="INTEGER" javaType="com.zhengaobin.cms.comon.ArticleType"/>
+		
+		
+		
 		<association property="user" column="user_id" 
 		   select="com.zhengaobin.cms.dao.UserMapper.findUserById" />
 	    <association property="channel" column="channel_id" 
@@ -20,8 +28,8 @@
 	</resultMap> 
 	
 	<select id="findTagsByArticleId" resultType="java.lang.String">
-		SELECT GROUP_CONCAT(tagname) tags 
-  			FROM cms_article_tag_middle m  JOIN cms_tag  t on m.tid=t.id 
+		SELECT GROUP_CONCAT(display_name) tags
+  			FROM cms_article_term m  JOIN cms_term  t on m.tid=t.id 
   			WHERE m.aid= #{value}
 			GROUP BY m.aid
 	</select>
@@ -29,7 +37,7 @@
 	<!-- 根据文章的分类和频道获取文章 -->
 	<select id="list" resultMap="articleMapper">
 		SELECT id,title,picture,channel_id,category_id,user_id,
-		        hits,hot,status,created,updated,commentCnt
+		        hits,hot,status,created,updated,commentCnt,articleType
 		 FROM cms_article
 		 WHERE channel_id=#{chnId}
 		 <if test="catId!=0">
@@ -40,7 +48,7 @@
 	
 	<select id="listHot"  resultMap="articleMapper">
 		SELECT id,title,picture,channel_id,category_id,user_id,
-		        hits,hot,status,created,updated,commentCnt
+		        hits,hot,status,created,updated,commentCnt,articleType
 		 FROM cms_article
 		 	WHERE hot>0 AND status=1 
 		 	AND deleted=0
@@ -50,7 +58,7 @@
 	<!-- 获取最新文章 -->
 	<select id="listLast"  resultMap="articleMapper">
 		SELECT id,title,picture,channel_id,category_id,user_id,
-		        hits,hot,status,created,updated,commentCnt
+		        hits,hot,status,created,updated,commentCnt,articleType
 		 FROM cms_article
 		 	WHERE deleted=0 AND status=1 
 		 	ORDER BY created DESC limit #{value}
@@ -71,7 +79,7 @@
 	
 	<select id="findById" resultMap="articleMapper">
 		SELECT id,title,picture,content,channel_id,category_id,user_id,
-		        hits,hot,status,created,updated,commentCnt
+		        hits,hot,status,created,updated,commentCnt,articleType
 		 FROM cms_article
 		 WHERE id=#{value}
 		 AND deleted=0
@@ -88,13 +96,16 @@
 	
 	
 	<insert id="add"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-		INSERT INTO cms_article(title,content,picture,channel_id,category_id,user_id,hits,hot,status,deleted,created,updated,commentCnt)
-		  values(#{title},#{content},#{picture},#{channelId},#{categoryId},#{userId},0,0,0,0,now(),now(),0)
+		INSERT INTO cms_article(title,content,picture,channel_id,category_id,user_id,hits,hot,status,deleted,created,updated,commentCnt,articleType)
+		  values(#{title},#{content},#{picture},#{channelId},#{categoryId},#{userId},0,0,0,0,now(),now(),0,
+		    #{articleType, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler,
+		   jdbcType=INTEGER, javaType=com.zhengaobin.cms.comon.ArticleType})
 	</insert>
 	    
 	<insert id="addTag" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-		INSERT INTO cms_tag(tagname) values(#{tagname})
+		INSERT INTO cms_term(display_name) values(#{display_name})
 	</insert>
+	
  
   </mapper>
   

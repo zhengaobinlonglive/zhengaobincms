@@ -121,15 +121,34 @@
 						</ol>
 					</div>
 				</div>
+				
 			   <div class="card">
 			   <div class="card-header">友情链接</div>
 			      <ol>
-			    <c:forEach items="${links}" var="l">
-			      <li class="text-truncate text-center"><a href="${l.url }" target="_blank">${l.text}</a></li>
+			    <c:forEach items="${linklist}" var="l">
+			      <li class="text-truncate text-center"><a href="${l.http }" target="_blank">${l.name}</a></li>
 			    
 			    </c:forEach>
 			     </ol>
 			   </div>
+			   
+			   <div class="card">专题文章</div>
+			   <c:forEach items="${specials}" var="special">
+					   	<div class="card">
+					   <div class="card-header">${special.title}</div>
+					      <ol>
+					    <c:forEach items="${special.artilceList}" var="article">
+					      <li class="text-truncate text-center">
+					      	 <a href="javascript:toDetail(${article.id })">${article.title }</a>
+					      </li>
+					    
+					    </c:forEach>
+					     </ol>
+					   </div>
+			   </c:forEach>
+			   
+			   
+			   
 			
 			</div>
 		</div>
@@ -183,7 +202,7 @@
 		 function toDetail(id){
 		
 		//	 window.open("/getArticleDetail?id="+id);
-		 window.open("/article/getDetail?aId="+id,"_blank")
+		 window.open("/article/show?id="+id,"_blank")
 		 }
 		 
 	</script>

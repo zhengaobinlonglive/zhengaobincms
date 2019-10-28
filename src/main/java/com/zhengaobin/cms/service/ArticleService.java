@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.github.pagehelper.PageInfo;
 import com.zhengaobin.cms.entity.Article;
+import com.zhengaobin.cms.entity.Comment;
 
 /**
  * @author 郑奥斌
@@ -90,6 +91,23 @@ public interface ArticleService {
 	 * @return
 	 */
 	int updateHot(Integer articleId, int status);
+	
+	/**
+	 * 发表文章评论
+	 * @param id
+	 * @param articleId
+	 * @param content
+	 */
+	void comment(Integer id, Integer articleId, String content);
+	
+	PageInfo<Comment> getCommentByArticleId(Integer articleId,Integer page);
+	
+	/**
+	 * 增加文章点击次数
+	 * @param id 文章id
+	 * @return
+	 */
+	int addHits(Integer id);
 	
 	
 }

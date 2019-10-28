@@ -6,7 +6,7 @@
 </div>
 <br />
 <div>
-	<div class="list-group">
+	<div class="list-group"  style="color:#7FFF00">
 		<ul class="list-group">
 			<li class="list-group-item  text-center"><a class="channel"
 				href="javascript:void(0)"  data="/user/myarticlelist">我的文章
@@ -14,7 +14,9 @@
 			<li class="list-group-item  text-center"><a class="channel"
 				href="javascript:void(0)" data="/article/add"
 				class="list-group-item">发布文章</a></li>
-				
+				<li class="list-group-item  text-center"><a class="channel"
+				href="javascript:void(0)" data="/article/addimg"
+				class="list-group-item">发布图片文章</a></li>
 			<!-- 我的投票 开始-->	
 		    <li class="list-group-item  text-center"><a class="channel"
 				href="javascript:void(0)"  data="/vote/list">我的投票
@@ -25,9 +27,9 @@
 			<!-- 我的投票 结束-->		
 				
 			<li class="list-group-item  text-center"><a class="channel"
-				href="javascript:void(0)" class="list-group-item" data="/commnent/getmylist">我的评论</a></li>
+				href="javascript:void(0)" class="list-group-item" data="/commnent/commnentlist">我的评论</a></li>
 			<li class="list-group-item  text-center"><a class="channel"
-				href="javascript:void(0)" class="list-group-item">上传头像</a></li>
+				href="javascript:void(0)" class="list-group-item" data="/user/toAddhead_picture">上传头像</a></li>
 			<li class="list-group-item  text-center"><a class="channel"
 				href="javascript:void(0)" class="list-group-item">个人设置</a></li>
 				<li class="list-group-item  text-center"><a class="channel"
@@ -38,8 +40,7 @@
 		<li class="list-group-item  text-center"><a class="channel"
 				href="javascript:void(0)" data="/blog/toList" class="list-group-item">博客管理</a></li>
 		
-		
-		
+
 		</ul>
 	</div>
 </div>

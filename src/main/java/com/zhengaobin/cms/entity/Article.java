@@ -1,6 +1,9 @@
 package com.zhengaobin.cms.entity;
 
 import java.util.Date;
+import java.util.List;
+
+import com.zhengaobin.cms.comon.ArticleType;
 
 /**
  * @author 郑奥斌
@@ -8,13 +11,20 @@ import java.util.Date;
  * 2019年10月17日
  */
 public class Article {
-		//版本号id
+	//版本号id
 		private static final long serialVersionUID = 178742213295392002L;
 		
 		//文章主键id
 		private Integer id;
 		//标题
 		private String title;
+		
+		public String getTags() {
+			return tags;
+		}
+		public void setTags(String tags) {
+			this.tags = tags;
+		}
 		//文章内容
 		private String content;
 		//图片
@@ -25,41 +35,25 @@ public class Article {
 		//分类id
 		private Integer categoryId;
 		private Cat cat;
-		//用户id
-		private Integer userId;
-		//点击量
-		private Integer hits;
-		//是否热门
-		private Integer hot;
-		//状态
-		private Integer status;
 		
-		private User user;
+		private List<ImageBean> imgList;
 		
 		
-		public User getUser() {
-			return user;
+		public List<ImageBean> getImgList() {
+			return imgList;
 		}
-		public void setUser(User user) {
-			this.user = user;
+		public void setImgList(List<ImageBean> imgList) {
+			this.imgList = imgList;
 		}
-		//是否已经逻辑删除
-		private Integer deleted;
-		//发表时间
-		private Date created;
-		//修改时间
-		private Date updated;
-		//评论数量
-		private Integer commentCnt;
-		// 标签 用逗号分隔
-		private String tags;
+		private ArticleType articleType=ArticleType.HTML;
 		
 		
-		public String getTags() {
-			return tags;
+		
+		public ArticleType getArticleType() {
+			return articleType;
 		}
-		public void setTags(String tags) {
-			this.tags = tags;
+		public void setArticleType(ArticleType articleType) {
+			this.articleType = articleType;
 		}
 		public Channel getChannel() {
 			return channel;
@@ -73,6 +67,43 @@ public class Article {
 		public void setCat(Cat cat) {
 			this.cat = cat;
 		}
+		//用户id
+		private Integer userId;
+		//点击量
+		private Integer hits;
+		//是否热门
+		private Integer hot;
+		//状态
+		private Integer status;
+		
+		
+		
+		
+		
+		
+		
+		//是否已经逻辑删除
+		private Integer deleted;
+		//发表时间
+		private Date created;
+		//修改时间
+		private Date updated;
+		//评论数量
+		private Integer commentCnt;
+		
+		// 标签 用逗号分隔
+		private String tags;
+		
+		public User getUser() {
+			return user;
+		}
+		public void setUser(User user) {
+			this.user = user;
+		}
+		private User user;
+		
+		
+		
 		public Integer getId() {
 			return id;
 		}
@@ -155,32 +186,25 @@ public class Article {
 			return commentCnt;
 		}
 		public void setCommentCnt(Integer commentCnt) {
+			
 			this.commentCnt = commentCnt;
 		}
-		
-		
 		@Override
 		public String toString() {
-			return "Article [id=" + id + ", title=" + title + ", content="
-					+ content + ", picture=" + picture + ", channelId="
-					+ channelId + ", channel=" + channel + ", categoryId="
-					+ categoryId + ", cat=" + cat + ", userId=" + userId
-					+ ", hits=" + hits + ", hot=" + hot + ", status=" + status
-					+ ", user=" + user + ", deleted=" + deleted + ", created="
-					+ created + ", updated=" + updated + ", commentCnt="
-					+ commentCnt + ", tags=" + tags + "]";
+			return "Article [id=" + id + ", title=" + title + ", content=" + content + ", picture=" + picture
+					+ ", channelId=" + channelId + ", channel=" + channel + ", categoryId=" + categoryId + ", cat=" + cat
+					+ ", articleType=" + articleType + ", userId=" + userId + ", hits=" + hits + ", hot=" + hot
+					+ ", status=" + status + ", deleted=" + deleted + ", created=" + created + ", updated=" + updated
+					+ ", commentCnt=" + commentCnt + ", tags=" + tags + ", user=" + user + "]";
 		}
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result
-					+ ((categoryId == null) ? 0 : categoryId.hashCode());
-			result = prime * result
-					+ ((channelId == null) ? 0 : channelId.hashCode());
+			result = prime * result + ((categoryId == null) ? 0 : categoryId.hashCode());
+			result = prime * result + ((channelId == null) ? 0 : channelId.hashCode());
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
-			result = prime * result
-					+ ((userId == null) ? 0 : userId.hashCode());
+			result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 			return result;
 		}
 		@Override
@@ -214,9 +238,5 @@ public class Article {
 				return false;
 			return true;
 		}
-		
-		
-		
-		
 		
 }
