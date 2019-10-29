@@ -108,6 +108,8 @@ public interface ArticleService {
 	 * @return
 	 */
 	int addHits(Integer id);
+
+	PageInfo<Comment> getCommentByUserId(Integer id, Integer page);
 	
 	
 }

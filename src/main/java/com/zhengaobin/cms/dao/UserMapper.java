@@ -29,7 +29,7 @@ public interface UserMapper {
 	 * @param username
 	 * @return
 	 */
-	@Select("select id,username,password,locked,role from cms_user where username=#{value} limit 1")
+	@Select("select id,username,password,locked,role,head_picture from cms_user where username=#{value} limit 1")
 	User findByName(String username);
 	
 	List<User> userList(@Param("name")String name);

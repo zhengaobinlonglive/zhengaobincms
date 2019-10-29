@@ -27,7 +27,7 @@
 			<!-- 我的投票 结束-->		
 				
 			<li class="list-group-item  text-center"><a class="channel"
-				href="javascript:void(0)" class="list-group-item" data="/commnent/commnentlist">我的评论</a></li>
+				href="javascript:void(0)" class="list-group-item" data="/article/getclist">我的评论</a></li>
 			<li class="list-group-item  text-center"><a class="channel"
 				href="javascript:void(0)" class="list-group-item" data="/user/toAddhead_picture">上传头像</a></li>
 			<li class="list-group-item  text-center"><a class="channel"

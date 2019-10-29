@@ -165,6 +165,10 @@ public interface ArticleMapper {
 	@Update("UPDATE cms_article SET hits = hits + 1 WHERE id =  #{id} ")
 	int increaseHits(Integer id);
 	
+	@Select("SELECT c.*,u.username as userName FROM cms_comment c LEFT JOIN cms_user u ON u.id=c.userId "
+			+ " WHERE c.userId=#{value} ORDER BY id desc")
+	List<Comment> getCommnentByUserId(Integer id);
+	
 	
 }
 

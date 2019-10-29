@@ -312,9 +312,10 @@ public class ArticleController {
 	 * @return
 	 */
 	@RequestMapping("getclist")
-	public String getComment(HttpServletRequest request,Integer articleId,
+	public String getComment(HttpServletRequest request,
 			@RequestParam(defaultValue="1") Integer page) {
-		PageInfo<Comment> comments = articleService.getCommentByArticleId(articleId, page);
+		User loginUser = (User)request.getSession().getAttribute(ConstClass.SESSION_USER_KEY);
+		PageInfo<Comment> comments = articleService.getCommentByUserId(loginUser.getId(), page);
 		request.setAttribute("comments", comments);
 		return "article/clist";
 	}

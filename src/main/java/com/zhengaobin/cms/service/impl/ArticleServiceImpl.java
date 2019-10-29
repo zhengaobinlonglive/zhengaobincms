@@ -181,4 +181,10 @@ public class ArticleServiceImpl implements ArticleService{
 		return articleMapper.increaseHits(id);
 	}
 
+	@Override
+	public PageInfo<Comment> getCommentByUserId(Integer id, Integer page) {
+		PageHelper.startPage(page, 5);
+		return new PageInfo<Comment>(articleMapper.getCommnentByUserId(id));
+	}
+
 }
