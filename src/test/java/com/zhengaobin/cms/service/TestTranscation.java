@@ -7,7 +7,7 @@ import com.zhengaobin.cms.entity.Article;
 
 /**
  * 测试事务
- * @author zhuzg
+ * @author zhengaobin
  *
  */
 public class TestTranscation extends BaseTest {

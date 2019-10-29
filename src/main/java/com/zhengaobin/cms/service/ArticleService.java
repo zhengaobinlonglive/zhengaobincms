@@ -111,5 +111,5 @@ public interface ArticleService {
 
 	PageInfo<Comment> getCommentByUserId(Integer id, Integer page);
 	
-	
+	int addTag(String tag);
 }

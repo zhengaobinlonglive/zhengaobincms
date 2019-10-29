@@ -12,7 +12,7 @@ import com.zhengaobin.utils.StringUtils;
 
 /**
  * 
- * @author zhuzg
+ * @author zhengaobin
  *
  */
 public class TestComment  extends BaseTest{
@@ -63,13 +63,13 @@ public class TestComment  extends BaseTest{
 			/*articleService.comment(46, articleIds[random.nextInt(10)], 
 					StringUtils.randomCharAndNumber(120),time2 );*/
 		}
-		/*for (int i = 51; i < 61; i++) {
+		for (int i = 51; i < 61; i++) {
 			for (int j = 0; j < 100; j++) {
 				//Comment comment = new Comment();
 				articleService.comment(46, i, " 测试发布评论 ，文章id是 [" + i + "] 第 "+j+"次发布"   );
 				
 			}
-		}*/
+		}
 	}
 	
 	

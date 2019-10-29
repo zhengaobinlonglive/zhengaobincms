@@ -112,7 +112,9 @@ public interface ArticleMapper {
 	 */
 	@Select("SELECT * FROM cms_term where display_name=#{value} limit 1")
 	Term findTagByName(String tag);
-
+	
+	
+	
 	
 	/**
 	 * 增加Tag实体备案
